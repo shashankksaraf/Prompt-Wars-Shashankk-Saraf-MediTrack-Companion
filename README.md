@@ -2,9 +2,9 @@
 
 MediTrack is a mobile-friendly daily medication schedule built for the PromptWars PS02 challenge. A person or a family member can enter a schedule on the same device. The Today screen lets the user record a scheduled occurrence as taken or skipped, see the recording time, and undo an entry.
 
-## Try the Phase 2 preview
+## Try the Phase 3A preview
 
-Open **Manage schedule**, add a fictional medicine with morning and evening times, then return to **Today**. Record the morning occurrence and refresh. The evening occurrence remains independent. Editing or archiving a personal medicine retains snapshots of recorded occurrences. Today displays the current local date.
+Choose **Try an editable demo** to open Priya’s fictional schedule. Select **Manage schedule**, edit the evening time from 8 PM to 9 PM, and save. Refresh Today to see the edited time. Choose **Exit demo** to return to setup. For your own local schedule, choose **Set up my schedule** or **Set up for someone else**, enter a display name, and add a medicine. Subsequent visits open the named schedule.
 
 Data is stored in the current browser. Use fictional entries when reviewing this prototype. The app tracks entered directions. Reminders are limited to the open app.
 

@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { buildDemoOccurrences } from './demoSchedule'
 import { todayLocalDate } from './dateUtils'
 import { formatScheduledTime } from './formatTime'
 import {
@@ -10,12 +9,18 @@ import {
 } from './occurrences'
 import { usePersonalMedicines } from './personalSchedule'
 import { useDoseRecords } from './storage'
-import type { DoseRecord, Occurrence } from './types'
+import type { DoseRecord, Occurrence, PersonalMedicine } from './types'
 import { useNow } from './useNow'
 import './TodayScreen.css'
 
 interface TodayScreenProps {
+  medicinesKey: string
+  recordsKey: string
+  seed?: PersonalMedicine[]
+  isDemo: boolean
+  displayName: string
   onManage: () => void
+  onExitDemo?: () => void
 }
 
 function OccurrenceCard({
@@ -75,12 +80,20 @@ function OccurrenceCard({
   )
 }
 
-export default function TodayScreen({ onManage }: TodayScreenProps) {
+export default function TodayScreen({
+  medicinesKey,
+  recordsKey,
+  seed,
+  isDemo,
+  displayName,
+  onManage,
+  onExitDemo,
+}: TodayScreenProps) {
   const { now, refresh: refreshNow } = useNow()
   const today = todayLocalDate(now)
 
-  const { medicines } = usePersonalMedicines()
-  const { records, recordDose, undoDose } = useDoseRecords()
+  const { medicines } = usePersonalMedicines(medicinesKey, seed)
+  const { records, recordDose, undoDose } = useDoseRecords(recordsKey)
   const [staleNotice, setStaleNotice] = useState<string | null>(null)
 
   function attemptRecord(occurrence: Occurrence, status: 'taken' | 'skipped') {
@@ -111,43 +124,31 @@ export default function TodayScreen({ onManage }: TodayScreenProps) {
     [today], // eslint-disable-line react-hooks/exhaustive-deps -- recompute only when the local date flips
   )
 
-  const personalOccurrences = useMemo(
+  const occurrences = useMemo(
     () => buildPersonalOccurrences(medicines, records, today),
     [medicines, records, today],
   )
-  const demoOccurrences = useMemo(() => buildDemoOccurrences(now), [today]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const personalCurrentId = findCurrentOccurrenceId(personalOccurrences, records, now)
-  const demoCurrentId = findCurrentOccurrenceId(demoOccurrences, records, now)
-
-  const orderedPersonal = withCurrentFirst(personalOccurrences, personalCurrentId)
-  const orderedDemo = withCurrentFirst(demoOccurrences, demoCurrentId)
-
-  const renderList = (occurrences: Occurrence[], currentId: string | null) => (
-    <ul className="occurrence-list">
-      {occurrences.map((occurrence) => (
-        <OccurrenceCard
-          key={occurrence.id}
-          occurrence={occurrence}
-          isCurrent={occurrence.id === currentId}
-          now={now}
-          record={records[occurrence.id]}
-          onTaken={() => attemptRecord(occurrence, 'taken')}
-          onSkip={() => attemptRecord(occurrence, 'skipped')}
-          onUndo={() => undoDose(occurrence.id)}
-        />
-      ))}
-    </ul>
-  )
+  const currentId = findCurrentOccurrenceId(occurrences, records, now)
+  const ordered = withCurrentFirst(occurrences, currentId)
 
   return (
     <main className="today-screen">
       <header className="today-header">
-        <h1>Today</h1>
+        <h1>{displayName}’s schedule · Today</h1>
         <p className="today-date">{todayHeading}</p>
-        <button type="button" className="manage-link" onClick={onManage}>
-          Manage schedule
-        </button>
+        {isDemo && (
+          <p className="demo-label">Fictional demo profile — changes here never affect your personal schedule.</p>
+        )}
+        <div className="header-actions">
+          <button type="button" className="manage-link" onClick={onManage}>
+            Manage schedule
+          </button>
+          {isDemo && onExitDemo && (
+            <button type="button" className="exit-demo-link" onClick={onExitDemo}>
+              Exit demo
+            </button>
+          )}
+        </div>
       </header>
 
       {staleNotice && (
@@ -157,20 +158,26 @@ export default function TodayScreen({ onManage }: TodayScreenProps) {
       )}
 
       <section className="schedule-section">
-        <h2 className="section-heading">Your schedule</h2>
-        {personalOccurrences.length === 0 ? (
+        {occurrences.length === 0 ? (
           <p className="empty-state">
-            No personal medicines yet. Use "Manage schedule" to add one for yourself or set one up
-            for a family member on this device.
+            No medicines yet. Use "Manage schedule" to add the first one.
           </p>
         ) : (
-          renderList(orderedPersonal, personalCurrentId)
+          <ul className="occurrence-list">
+            {ordered.map((occurrence) => (
+              <OccurrenceCard
+                key={occurrence.id}
+                occurrence={occurrence}
+                isCurrent={occurrence.id === currentId}
+                now={now}
+                record={records[occurrence.id]}
+                onTaken={() => attemptRecord(occurrence, 'taken')}
+                onSkip={() => attemptRecord(occurrence, 'skipped')}
+                onUndo={() => undoDose(occurrence.id)}
+              />
+            ))}
+          </ul>
         )}
-      </section>
-
-      <section className="schedule-section">
-        <p className="demo-label">Fictional demo schedule</p>
-        {renderList(orderedDemo, demoCurrentId)}
       </section>
     </main>
   )

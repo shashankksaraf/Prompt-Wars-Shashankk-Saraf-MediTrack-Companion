@@ -1,17 +1,5 @@
 export type DoseStatus = 'taken' | 'skipped'
 
-export interface Medicine {
-  id: string
-  name: string
-  directions: string
-}
-
-export interface ScheduledDose {
-  medicineId: string
-  /** 24-hour "HH:MM" local time */
-  time: string
-}
-
 /** A medicine the user (or a caregiver on their behalf) has entered, with one or more daily times. */
 export interface PersonalMedicine {
   id: string

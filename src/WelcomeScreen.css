@@ -1,0 +1,70 @@
+.welcome-screen {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 1rem;
+}
+
+.welcome-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.12);
+}
+
+.welcome-card h1 {
+  font-size: 1.9rem;
+  margin: 0 0 0.75rem;
+  color: #111;
+  text-align: center;
+}
+
+.welcome-subtitle {
+  font-size: 1.08rem;
+  color: #3f3f46;
+  line-height: 1.5;
+  margin: 0 0 1.75rem;
+  text-align: center;
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.welcome-primary-button {
+  width: 100%;
+  min-height: 56px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1d4ed8;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.welcome-primary-button:hover {
+  background: #1a41b8;
+}
+
+.welcome-secondary-button {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  background: #fff;
+  border: 2px dashed #1d4ed8;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+
+.welcome-secondary-button:hover {
+  background: rgba(29, 78, 216, 0.08);
+}

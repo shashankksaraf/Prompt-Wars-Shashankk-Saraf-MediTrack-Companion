@@ -5,7 +5,8 @@
 }
 
 .today-header h1 {
-  font-size: 2rem;
+  font-size: 1.65rem;
+  line-height: 1.25;
   margin: 0;
   color: #111;
 }
@@ -16,9 +17,15 @@
   margin: 0.25rem 0 1.25rem;
 }
 
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
 .manage-link {
   display: inline-block;
-  margin-top: 0.75rem;
   min-height: 44px;
   padding: 0 1.1rem;
   font-size: 1rem;
@@ -32,6 +39,23 @@
 
 .manage-link:hover {
   background: rgba(29, 78, 216, 0.08);
+}
+
+.exit-demo-link {
+  display: inline-block;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #78716c;
+  background: #fff;
+  border: 2px solid #d6d3d1;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.exit-demo-link:hover {
+  background: #f5f5f4;
 }
 
 .stale-notice {
