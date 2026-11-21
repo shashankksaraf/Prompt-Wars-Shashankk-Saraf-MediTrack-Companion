@@ -1,40 +1,23 @@
 # MediTrack Companion
 
-MediTrack Companion helps people who manage daily medicines, especially older adults, answer two questions: “What is scheduled next?” and “Did I already record it?” Built for PS02, Smart Medicine Reminder, at the Prompt Wars hackathon at Gauhati University.
+A daily medicine tracker built for **PS02 · Smart Medicine Reminder** at the Prompt Wars hackathon at Gauhati University. [Try the editable demo](https://shashankk-saraf-meditrack-companion.vercel.app/app) or [visit the product website](https://shashankk-saraf-meditrack-companion.vercel.app).
 
-[Open MediTrack Companion](https://shashankk-saraf-meditrack-companion.vercel.app/app) · [Product website](https://shashankk-saraf-meditrack-companion.vercel.app)
+## The problem and the person using it
 
-## Try it in one minute
+The challenge was to help people organise and track daily medication, especially older adults who find it difficult to remember their schedules. I designed for someone looking at two medicines scheduled for 8 AM and wondering, “Which one have I already taken?” A family member can help enter the schedule on the same device, and the person taking the medicine can handle the daily check-in.
 
-1. Choose **Try an editable demo** to open Priya’s fictional schedule. The demo has its own storage, separate from personal medicines.
-2. Open **Manage schedule** and give two medicines the same scheduled time. Today groups them together and shows each medicine’s entered directions.
-3. Mark one occurrence as taken. The other stays pending, and the recorded one moves below the remaining schedule with its actual recording time.
-4. Refresh to see that the entry persists. Use **Undo** to put that occurrence back in its time group.
+## Choosing a solution
 
-## Personal schedules
+I considered spoken reminders, reading a prescription into a draft schedule, and letting a caregiver manage medicines remotely. I started with the decision the user faces every day. The Today screen groups medicines that share a time and gives each one its own large button. Recording the first 8 AM medicine leaves the second visible at the top. The recorded one moves down, with the time the user actually tapped.
 
-Choose setup for yourself or someone else, name the schedule, and enter the medicines, directions, and daily times. You can edit or archive a medicine. Today shows pending time groups in order and keeps recorded doses at the bottom. Skipping is an explicit action. Each occurrence has its own record, even when the same medicine appears twice that day.
+## How I built it with two AI tools
 
-The device-only tracker stores personal data in this browser. Clearing site data removes that local schedule. Medicine directions come from the person setting up the schedule. The interface uses large text, labelled controls, keyboard focus, and a full-width primary action.
+I chose the scope and worked in small milestones. I used Codex to discuss the user journey, turn each decision into a prompt with a concrete check, and review what changed. Claude Code CLI implemented the app in React and TypeScript. For example, we checked that recording a morning dose and refreshing the page preserved that entry while leaving the evening dose of the same medicine pending. That example helped us decide how to identify each scheduled dose.
 
-## Implementation and development
+## A decision during the competition
 
-React, TypeScript, and Vite power the landing page and tracker. Local storage holds device-only schedules and dose records. A record identifies the medicine, local date, and scheduled time, and captures the directions and actual recording time when an action is recorded.
+An internet outage interrupted the time available for hosted testing. Remote caregiver access was still awaiting verification, so I kept the submission focused on the device-only tracker. Dated calendar history also stayed outside the submitted version.
 
-The participant chose the product scope and directed the milestone reviews. Codex helped plan milestones and review the implementation. Claude Code CLI implemented the application. One review changed how Today behaves when several medicines share a time. Recording one now leaves the other medicines available in the same group, so a single tap cannot mark the entire group taken.
+## The final product
 
-## Build and checks
-
-With Node.js and npm installed, run:
-
-~~~sh
-npm ci
-npm run lint
-npm run build
-~~~
-
-Vercel serves the production build. The website opens at the root and the tracker opens at /app.
-
-## Future work
-
-Calendar history and cross-device caregiver accounts are future milestones. A family member can already set up a schedule on the same device. Spoken reminders and prescription upload with a review-and-confirm step were deferred to leave time for verifying the daily tracking workflow.
+Open the app to try a fictional schedule or create your own. Enter medicine names, directions, and times. On Today, mark each dose taken or skipped, or use Undo if you tapped by mistake. You can edit the schedule as it changes. The schedule and recorded entries stay in the same browser after refresh.
