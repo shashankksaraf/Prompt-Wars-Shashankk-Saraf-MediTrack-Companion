@@ -1,0 +1,214 @@
+.today-screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.today-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #111;
+}
+
+.today-date {
+  font-size: 1.1rem;
+  color: #3f3f46;
+  margin: 0.25rem 0 1.25rem;
+}
+
+.manage-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #fff;
+  border: 2px solid #1d4ed8;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.manage-link:hover {
+  background: rgba(29, 78, 216, 0.08);
+}
+
+.schedule-section {
+  margin-bottom: 1.75rem;
+}
+
+.section-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.85rem;
+}
+
+.empty-state {
+  font-size: 1.02rem;
+  color: #3f3f46;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  line-height: 1.45;
+}
+
+.demo-label {
+  display: inline-block;
+  background: rgba(29, 78, 216, 0.12);
+  color: #1d4ed8;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  margin: 0 0 1.25rem;
+}
+
+.occurrence-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.occurrence-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.4rem 1.25rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.1);
+  border: 2px solid transparent;
+}
+
+.occurrence-card.is-current {
+  border-color: #1d4ed8;
+  box-shadow: 0 8px 20px rgba(29, 78, 216, 0.2);
+}
+
+.occurrence-card.is-ghost {
+  background: #f7f7fb;
+}
+
+.archived-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #78716c;
+  background: rgba(120, 113, 108, 0.12);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin: 0 0 0.75rem;
+}
+
+.current-badge {
+  position: absolute;
+  top: -0.7rem;
+  left: 1.1rem;
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+}
+
+.occurrence-time {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1d4ed8;
+  line-height: 1.2;
+}
+
+.occurrence-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0.6rem;
+  color: #111;
+}
+
+.occurrence-directions {
+  font-size: 1.05rem;
+  color: #27272a;
+  line-height: 1.45;
+  margin: 0 0 1.1rem;
+}
+
+.status-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.status-upcoming {
+  color: #52525b;
+}
+
+.status-due {
+  color: #b91c1c;
+}
+
+.status-taken {
+  color: #15803d;
+}
+
+.status-skipped {
+  color: #b45309;
+}
+
+.occurrence-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.mark-taken-button {
+  width: 100%;
+  min-height: 56px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1d4ed8;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.mark-taken-button:hover {
+  background: #1a41b8;
+}
+
+.skip-button {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  background: #fff;
+  border: 2px solid #1d4ed8;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.skip-button:hover {
+  background: rgba(29, 78, 216, 0.08);
+}
+
+.undo-button {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  background: #fff;
+  border: 2px solid #9ca3af;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.undo-button:hover {
+  background: #f3f4f6;
+}

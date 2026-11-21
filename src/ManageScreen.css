@@ -1,0 +1,257 @@
+.manage-screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.manage-header {
+  margin-bottom: 1.5rem;
+}
+
+.back-link {
+  display: inline-block;
+  min-height: 44px;
+  padding: 0 0.6rem;
+  margin: 0 0 0.75rem -0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.manage-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #111;
+}
+
+.manage-subtitle {
+  font-size: 1.02rem;
+  color: #3f3f46;
+  margin: 0.4rem 0 0;
+  line-height: 1.45;
+}
+
+.medicine-form {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.4rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.1);
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 1rem;
+}
+
+.field-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #27272a;
+  margin: 0.9rem 0 0.4rem;
+}
+
+.field-label:first-of-type {
+  margin-top: 0;
+}
+
+.text-input {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid #d4d4d8;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+textarea.text-input {
+  min-height: 64px;
+  resize: vertical;
+}
+
+.times-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.time-input {
+  flex: 1 1 auto;
+  min-height: 48px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  padding: 0.5rem 0.6rem;
+  border: 2px solid #d4d4d8;
+  border-radius: 10px;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.remove-time-button {
+  min-height: 44px;
+  padding: 0 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #b91c1c;
+  background: #fff;
+  border: 2px solid #e4a4a4;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.add-time-button {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: 0.6rem;
+  padding: 0 0.9rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  background: #fff;
+  border: 2px dashed #1d4ed8;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.form-errors {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1rem;
+  background: rgba(185, 28, 28, 0.08);
+  color: #991b1b;
+  font-weight: 600;
+  font-size: 0.98rem;
+  border-radius: 10px;
+  list-style: disc inside;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.save-button {
+  flex: 1 1 auto;
+  min-height: 52px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1d4ed8;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background: #1a41b8;
+}
+
+.cancel-button {
+  min-height: 52px;
+  padding: 0 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #374151;
+  background: #fff;
+  border: 2px solid #9ca3af;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.medicine-list-section {
+  margin-bottom: 1.5rem;
+}
+
+.medicine-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.medicine-item {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.1rem 1.1rem;
+  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.08);
+}
+
+.medicine-item.is-archived {
+  background: #f1f1f4;
+  box-shadow: none;
+  opacity: 0.85;
+}
+
+.medicine-item-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  color: #111;
+}
+
+.medicine-item-directions {
+  font-size: 1rem;
+  color: #27272a;
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+
+.medicine-item-times {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  margin: 0 0 0.75rem;
+}
+
+.medicine-item-actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.edit-button,
+.archive-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.edit-button {
+  color: #1d4ed8;
+  background: #fff;
+  border: 2px solid #1d4ed8;
+}
+
+.edit-button:hover {
+  background: rgba(29, 78, 216, 0.08);
+}
+
+.archive-button {
+  color: #78716c;
+  background: #fff;
+  border: 2px solid #d6d3d1;
+}
+
+.archive-button:hover {
+  background: #f5f5f4;
+}
