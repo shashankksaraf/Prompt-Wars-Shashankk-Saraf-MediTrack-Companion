@@ -1,6 +1,6 @@
 # MediTrack Companion
 
-A daily medicine tracker built for **PS02 · Smart Medicine Reminder** at the Prompt Wars hackathon at Gauhati University. [Try the editable demo](https://shashankk-saraf-meditrack-companion.vercel.app/app) or [visit the product website](https://shashankk-saraf-meditrack-companion.vercel.app).
+A daily medicine tracker built for **PS02 · Smart Medicine Reminder** at the Prompt Wars hackathon at Gauhati University in Guwahati, Assam. [Try the editable demo](https://shashankk-saraf-meditrack-companion.vercel.app/app) or [visit the product website](https://shashankk-saraf-meditrack-companion.vercel.app).
 
 ## The problem and the person using it
 
@@ -21,3 +21,8 @@ An internet outage interrupted the time available for hosted testing. Remote car
 ## The final product
 
 Open the app to try a fictional schedule or create your own. Enter medicine names, directions, and times. On Today, mark each dose taken or skipped, or use Undo if you tapped by mistake. You can edit the schedule as it changes. The schedule and recorded entries stay in the same browser after refresh.
+
+## Planned developments
+
+- **Calendar history.** Choose a past date to see which medicines were scheduled that day, which doses were marked taken or skipped, and which have no recorded outcome. Later schedule edits would preserve the earlier day’s details.
+- **Caregiver accounts.** The person taking the medicines could invite a trusted caregiver to sign in on a separate device. With permission, the caregiver could add medicines and update their directions or scheduled times. The recipient would keep control over recording doses and could revoke access at any time.
