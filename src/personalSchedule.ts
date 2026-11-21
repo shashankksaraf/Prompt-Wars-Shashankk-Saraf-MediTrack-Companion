@@ -84,6 +84,20 @@ export function usePersonalMedicines(storageKey: string, seed?: PersonalMedicine
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only priming the ref on mount/key change, not tracking `medicines`
   }, [storageKey])
 
+  // Another tab editing the same schedule fires this event here, but never in the tab
+  // that made the change. Without it, this tab's next write would be based on a stale
+  // in-memory copy and silently clobber the other tab's edit.
+  useEffect(() => {
+    function onStorage(event: StorageEvent) {
+      if (event.key !== storageKey) return
+      const fresh = loadMedicines(storageKey)
+      medicinesRef.current = fresh
+      setMedicines(fresh)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [storageKey])
+
   const addMedicine = useCallback(
     (input: MedicineInput) => {
       const medicine: PersonalMedicine = {

@@ -1,26 +1,26 @@
 import { occurrenceId, parseOccurrenceId, toLocalDateTime } from './dateUtils'
-import { DEMO_MEDICINE_IDS } from './demoSchedule'
 import { formatRecordedTime, formatScheduledTime } from './formatTime'
 import type { DoseRecord, DoseRecords, Occurrence, PersonalMedicine } from './types'
 
-function timeToMinutes(time: string): number {
-  const [hours, minutes] = time.split(':').map(Number)
-  return hours * 60 + minutes
-}
-
 /**
- * Builds today's occurrences for a personal schedule:
+ * Builds today's occurrences for a schedule (personal or demo):
  * - one per (active medicine, time), using live medicine data unless a
  *   record already exists for that slot, in which case the record's
  *   snapshot wins so later edits never rewrite history, and
  * - one "ghost" per record that still belongs to today but no longer comes
  *   from the active schedule (its medicine was edited away or archived),
  *   rendered entirely from the record's snapshot.
+ *
+ * `excludeMedicineIds` filters out records left over from a different store that
+ * used to share this one's localStorage key (the personal store must not resurrect
+ * legacy demo records as ghosts; the demo store itself must not exclude anything,
+ * since its own medicines reuse those same ids).
  */
 export function buildPersonalOccurrences(
   medicines: PersonalMedicine[],
   records: DoseRecords,
   today: string,
+  excludeMedicineIds: Set<string> = new Set(),
 ): Occurrence[] {
   const activeMedicines = medicines.filter((m) => !m.archived)
   const activeIds = new Set<string>()
@@ -51,7 +51,7 @@ export function buildPersonalOccurrences(
       (entry): entry is { id: string; parsed: NonNullable<ReturnType<typeof parseOccurrenceId>>; record: DoseRecord } =>
         entry.parsed !== null &&
         entry.parsed.date === today &&
-        !DEMO_MEDICINE_IDS.has(entry.parsed.medicineId),
+        !excludeMedicineIds.has(entry.parsed.medicineId),
     )
     .map(({ id, parsed, record }) => {
       const sourceMedicine = medicinesById.get(parsed.medicineId)
@@ -70,28 +70,38 @@ export function buildPersonalOccurrences(
   return [...active, ...ghosts].sort((a, b) => a.time.localeCompare(b.time))
 }
 
-/** The next unrecorded, non-ghost occurrence due (or, if none are due yet, the next upcoming one). */
-export function findCurrentOccurrenceId(
-  occurrences: Occurrence[],
-  records: DoseRecords,
-  now: Date,
-): string | null {
-  const nowMinutes = now.getHours() * 60 + now.getMinutes()
-  const unrecorded = occurrences.filter((o) => !o.isGhost && !records[o.id])
-  if (unrecorded.length === 0) return null
-
-  const due = unrecorded.filter((o) => timeToMinutes(o.time) <= nowMinutes)
-  if (due.length > 0) return due[due.length - 1].id
-
-  return unrecorded[0].id
+export interface TimeGroup {
+  time: string
+  occurrences: Occurrence[]
 }
 
-/** Puts the highlighted (current) occurrence first; keeps the rest in scheduled order. */
-export function withCurrentFirst(occurrences: Occurrence[], currentId: string | null): Occurrence[] {
-  if (!currentId) return occurrences
-  const current = occurrences.find((o) => o.id === currentId)
-  if (!current) return occurrences
-  return [current, ...occurrences.filter((o) => o.id !== currentId)]
+/** Unrecorded, non-ghost occurrences grouped by scheduled time, earliest group first. */
+export function groupPendingByTime(occurrences: Occurrence[], records: DoseRecords): TimeGroup[] {
+  const groupsByTime = new Map<string, Occurrence[]>()
+  for (const occurrence of occurrences) {
+    if (occurrence.isGhost || records[occurrence.id]) continue
+    const group = groupsByTime.get(occurrence.time)
+    if (group) group.push(occurrence)
+    else groupsByTime.set(occurrence.time, [occurrence])
+  }
+  return [...groupsByTime.entries()]
+    .map(([time, occs]) => ({ time, occurrences: occs }))
+    .sort((a, b) => a.time.localeCompare(b.time))
+}
+
+export interface RecordedEntry {
+  occurrence: Occurrence
+  record: DoseRecord
+}
+
+/** Every recorded occurrence (including ghosts, which are always recorded), most recent first. */
+export function getRecordedEntries(occurrences: Occurrence[], records: DoseRecords): RecordedEntry[] {
+  const entries: RecordedEntry[] = []
+  for (const occurrence of occurrences) {
+    const record = records[occurrence.id]
+    if (record) entries.push({ occurrence, record })
+  }
+  return entries.sort((a, b) => b.record.recordedAt.localeCompare(a.record.recordedAt))
 }
 
 export type StatusKind = 'taken' | 'skipped' | 'upcoming' | 'due'
@@ -101,18 +111,20 @@ export interface StatusLabel {
   kind: StatusKind
 }
 
-export function statusLabelFor(occurrence: Occurrence, record: DoseRecord | undefined, now: Date): StatusLabel {
-  if (record?.status === 'taken') {
-    return { text: `Taken at ${formatRecordedTime(record.recordedAt)}`, kind: 'taken' }
-  }
-  if (record?.status === 'skipped') {
-    return { text: `Skipped at ${formatRecordedTime(record.recordedAt)}`, kind: 'skipped' }
-  }
-
-  const scheduledAt = toLocalDateTime(occurrence.date, occurrence.time)
-  const formattedTime = formatScheduledTime(occurrence.time)
+/** Status line for a pending time group: whether its scheduled time is still ahead or has passed. */
+export function groupStatusLabel(time: string, date: string, now: Date): StatusLabel {
+  const scheduledAt = toLocalDateTime(date, time)
+  const formattedTime = formatScheduledTime(time)
   if (scheduledAt.getTime() > now.getTime()) {
     return { text: `Upcoming at ${formattedTime}`, kind: 'upcoming' }
   }
   return { text: `Scheduled for ${formattedTime} · Unrecorded`, kind: 'due' }
+}
+
+/** Status line for an already-recorded occurrence. */
+export function recordedStatusLabel(record: DoseRecord): StatusLabel {
+  if (record.status === 'taken') {
+    return { text: `Taken at ${formatRecordedTime(record.recordedAt)}`, kind: 'taken' }
+  }
+  return { text: `Skipped at ${formatRecordedTime(record.recordedAt)}`, kind: 'skipped' }
 }

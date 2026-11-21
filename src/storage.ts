@@ -50,6 +50,21 @@ export function useDoseRecords(storageKey: string) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only priming the ref on mount/key change, not tracking `records`
   }, [storageKey])
 
+  // Another tab writing to this same storage key (e.g. recording a different occurrence)
+  // fires this event here, but never in the tab that made the change. Without it, this
+  // tab's next write would be based on a stale in-memory copy and silently clobber the
+  // other tab's record.
+  useEffect(() => {
+    function onStorage(event: StorageEvent) {
+      if (event.key !== storageKey) return
+      const fresh = loadRecords(storageKey)
+      recordsRef.current = fresh
+      setRecords(fresh)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [storageKey])
+
   const recordDose = useCallback(
     (occurrenceId: string, status: DoseStatus, snapshot: DoseSnapshot) => {
       // The first write wins and keeps its original timestamp and snapshot.
