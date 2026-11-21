@@ -1,21 +1,40 @@
 # MediTrack Companion
 
-MediTrack is a mobile-friendly daily medication schedule built for the PromptWars PS02 challenge. A person or a family member can enter a schedule on the same device. The Today screen lets the user record a scheduled occurrence as taken or skipped, see the recording time, and undo an entry.
+MediTrack Companion helps people who manage daily medicines, especially older adults, answer two questions: “What is scheduled next?” and “Did I already record it?” Built for PS02, Smart Medicine Reminder, at the Prompt Wars hackathon at Gauhati University.
 
-## Try the Phase 3A preview
+[Open MediTrack Companion](https://shashankk-saraf-meditrack-companion.vercel.app/app) · [Product website](https://shashankk-saraf-meditrack-companion.vercel.app)
 
-Choose **Try an editable demo** to open Priya’s fictional schedule. Select **Manage schedule**, edit the evening time from 8 PM to 9 PM, and save. Refresh Today to see the edited time. Choose **Exit demo** to return to setup. For your own local schedule, choose **Set up my schedule** or **Set up for someone else**, enter a display name, and add a medicine. Subsequent visits open the named schedule.
+## Try it in one minute
 
-Data is stored in the current browser. Use fictional entries when reviewing this prototype. The app tracks entered directions. Reminders are limited to the open app.
+1. Choose **Try an editable demo** to open Priya’s fictional schedule. The demo has its own storage, separate from personal medicines.
+2. Open **Manage schedule** and give two medicines the same scheduled time. Today groups them together and shows each medicine’s entered directions.
+3. Mark one occurrence as taken. The other stays pending, and the recorded one moves below the remaining schedule with its actual recording time.
+4. Refresh to see that the entry persists. Use **Undo** to put that occurrence back in its time group.
 
-## Run locally
+## Personal schedules
 
-With Node.js 22.12 or newer and npm, run `npm ci` and `npm run dev`. Use `npm run build` for the production bundle and `npm run lint` for static checks.
+Choose setup for yourself or someone else, name the schedule, and enter the medicines, directions, and daily times. You can edit or archive a medicine. Today shows pending time groups in order and keeps recorded doses at the bottom. Skipping is an explicit action. Each occurrence has its own record, even when the same medicine appears twice that day.
 
-## How it was built
+The device-only tracker stores personal data in this browser. Clearing site data removes that local schedule. Medicine directions come from the person setting up the schedule. The interface uses large text, labelled controls, keyboard focus, and a full-width primary action.
 
-The participant selected the problem and scope. Codex planned and reviewed milestones. Claude Code implemented the React, Vite, and TypeScript application. Review focused on independent scheduled times, local persistence, keyboard access, and preserving recorded details through schedule changes.
+## Implementation and development
 
-## Current review and future expansion
+React, TypeScript, and Vite power the landing page and tracker. Local storage holds device-only schedules and dose records. A record identifies the medicine, local date, and scheduled time, and captures the directions and actual recording time when an action is recorded.
 
-Phase 2 review led to three corrections: demo entries stay separate from personal records, future slots are labelled Upcoming, and a tap after midnight refreshes a stale schedule before recording. Linked caregiver accounts are planned for a later milestone. Voice guidance and background alerts were deferred to focus the timed build on the daily recording flow.
+The participant chose the product scope and directed the milestone reviews. Codex helped plan milestones and review the implementation. Claude Code CLI implemented the application. One review changed how Today behaves when several medicines share a time. Recording one now leaves the other medicines available in the same group, so a single tap cannot mark the entire group taken.
+
+## Build and checks
+
+With Node.js and npm installed, run:
+
+~~~sh
+npm ci
+npm run lint
+npm run build
+~~~
+
+Vercel serves the production build. The website opens at the root and the tracker opens at /app.
+
+## Future work
+
+Calendar history and cross-device caregiver accounts are future milestones. A family member can already set up a schedule on the same device. Spoken reminders and prescription upload with a review-and-confirm step were deferred to leave time for verifying the daily tracking workflow.
