@@ -1,4 +1,5 @@
 import { occurrenceId, parseOccurrenceId, toLocalDateTime } from './dateUtils'
+import { DEMO_MEDICINE_IDS } from './demoSchedule'
 import { formatRecordedTime, formatScheduledTime } from './formatTime'
 import type { DoseRecord, DoseRecords, Occurrence, PersonalMedicine } from './types'
 
@@ -48,7 +49,9 @@ export function buildPersonalOccurrences(
     .map(([id, record]) => ({ id, parsed: parseOccurrenceId(id), record }))
     .filter(
       (entry): entry is { id: string; parsed: NonNullable<ReturnType<typeof parseOccurrenceId>>; record: DoseRecord } =>
-        entry.parsed !== null && entry.parsed.date === today,
+        entry.parsed !== null &&
+        entry.parsed.date === today &&
+        !DEMO_MEDICINE_IDS.has(entry.parsed.medicineId),
     )
     .map(({ id, parsed, record }) => {
       const sourceMedicine = medicinesById.get(parsed.medicineId)

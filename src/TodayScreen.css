@@ -34,6 +34,17 @@
   background: rgba(29, 78, 216, 0.08);
 }
 
+.stale-notice {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #92400e;
+  background: rgba(217, 119, 6, 0.12);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin: 0 0 1.25rem;
+  line-height: 1.4;
+}
+
 .schedule-section {
   margin-bottom: 1.75rem;
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { buildDemoOccurrences } from './demoSchedule'
 import { todayLocalDate } from './dateUtils'
 import { formatScheduledTime } from './formatTime'
@@ -36,12 +36,13 @@ function OccurrenceCard({
   onUndo: () => void
 }) {
   const status = statusLabelFor(occurrence, record, now)
+  const currentBadgeText = status.kind === 'due' ? 'Up now' : status.kind === 'upcoming' ? 'Upcoming' : null
 
   return (
     <li
       className={`occurrence-card${isCurrent ? ' is-current' : ''}${occurrence.isGhost ? ' is-ghost' : ''}`}
     >
-      {isCurrent && <span className="current-badge">Up now</span>}
+      {isCurrent && currentBadgeText && <span className="current-badge">{currentBadgeText}</span>}
 
       <div className="occurrence-time">{formatScheduledTime(occurrence.time)}</div>
       <h2 className="occurrence-name">{occurrence.medicineName}</h2>
@@ -75,11 +76,30 @@ function OccurrenceCard({
 }
 
 export default function TodayScreen({ onManage }: TodayScreenProps) {
-  const now = useNow()
+  const { now, refresh: refreshNow } = useNow()
   const today = todayLocalDate(now)
 
   const { medicines } = usePersonalMedicines()
   const { records, recordDose, undoDose } = useDoseRecords()
+  const [staleNotice, setStaleNotice] = useState<string | null>(null)
+
+  function attemptRecord(occurrence: Occurrence, status: 'taken' | 'skipped') {
+    const actualToday = todayLocalDate(new Date())
+    if (occurrence.date !== actualToday) {
+      // The day changed since this screen last updated (e.g. a tap right after local
+      // midnight, before the next tick). Refresh to today's real schedule instead of
+      // recording against the stale date, and have the user confirm on the new screen.
+      refreshNow()
+      setStaleNotice('The day just changed. Today’s schedule has been refreshed — please check and tap again.')
+      return
+    }
+    setStaleNotice(null)
+    recordDose(occurrence.id, status, {
+      medicineName: occurrence.medicineName,
+      directions: occurrence.directions,
+      scheduledTime: occurrence.time,
+    })
+  }
 
   const todayHeading = useMemo(
     () =>
@@ -112,20 +132,8 @@ export default function TodayScreen({ onManage }: TodayScreenProps) {
           isCurrent={occurrence.id === currentId}
           now={now}
           record={records[occurrence.id]}
-          onTaken={() =>
-            recordDose(occurrence.id, 'taken', {
-              medicineName: occurrence.medicineName,
-              directions: occurrence.directions,
-              scheduledTime: occurrence.time,
-            })
-          }
-          onSkip={() =>
-            recordDose(occurrence.id, 'skipped', {
-              medicineName: occurrence.medicineName,
-              directions: occurrence.directions,
-              scheduledTime: occurrence.time,
-            })
-          }
+          onTaken={() => attemptRecord(occurrence, 'taken')}
+          onSkip={() => attemptRecord(occurrence, 'skipped')}
           onUndo={() => undoDose(occurrence.id)}
         />
       ))}
@@ -141,6 +149,12 @@ export default function TodayScreen({ onManage }: TodayScreenProps) {
           Manage schedule
         </button>
       </header>
+
+      {staleNotice && (
+        <p className="stale-notice" role="status">
+          {staleNotice}
+        </p>
+      )}
 
       <section className="schedule-section">
         <h2 className="section-heading">Your schedule</h2>

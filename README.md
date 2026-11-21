@@ -18,4 +18,4 @@ The participant selected the problem and scope. Codex planned and reviewed miles
 
 ## Current review and future expansion
 
-The Phase 2 review found that recorded demo items can appear in the personal section and upcoming items can carry a misleading current-time badge. Corrections are pending. Linked caregiver accounts are planned for a later milestone. Voice guidance and background alerts were deferred to focus the timed build on the daily recording flow.
+Phase 2 review led to three corrections: demo entries stay separate from personal records, future slots are labelled Upcoming, and a tap after midnight refreshes a stale schedule before recording. Linked caregiver accounts are planned for a later milestone. Voice guidance and background alerts were deferred to focus the timed build on the daily recording flow.

@@ -26,6 +26,15 @@ export const DEMO_SCHEDULE: ScheduledDose[] = [
   { medicineId: 'lunoprin', time: '20:00' },
 ]
 
+/** Phase 1 used these ids for the demo medicines before the Phase 2 rename. */
+const LEGACY_DEMO_MEDICINE_IDS = ['amlodipine', 'vitamin-d3']
+
+/** Every medicine id the demo schedule has ever used, current or legacy. */
+export const DEMO_MEDICINE_IDS = new Set<string>([
+  ...DEMO_MEDICINES.map((medicine) => medicine.id),
+  ...LEGACY_DEMO_MEDICINE_IDS,
+])
+
 export function buildDemoOccurrences(date: Date = new Date()): Occurrence[] {
   const medicinesById = new Map(DEMO_MEDICINES.map((medicine) => [medicine.id, medicine]))
   const today = todayLocalDate(date)
